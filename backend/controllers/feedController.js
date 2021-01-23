@@ -1,8 +1,8 @@
 import asyncHandler from "express-async-handler";
-import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import FollowUser from "../models/followUserModel.js";
 import FollowTag from "../models/followTagModel.js";
+import mongoose from "mongoose";
 
 // @route: GET: localhost:5000/api/feeds/users
 // @desc: get the posts from users which login user follows
@@ -61,6 +61,7 @@ const getFeedsFromTags = asyncHandler(async (req, res) => {
 
   const skip = limit * page - limit;
   const feeds = await Post.find({ tags: { $in: arrTags } })
+    .populate("userId", "name email")
     .limit(limit)
     .skip(skip)
     .sort("-createdAt");
@@ -131,7 +132,9 @@ const getFeedsFromTag = asyncHandler(async (req, res) => {
 const createFeed = asyncHandler(async (req, res) => {
   const { title, description, tags } = req.body;
 
+  const login_user_id = req.user._id;
   const postObj = {
+    userId: mongoose.Types.ObjectId(login_user_id),
     title,
     description,
   };

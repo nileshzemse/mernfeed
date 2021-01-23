@@ -55,25 +55,33 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data } = await axios.get(
+    const { data: data_users_follows } = await axios.get(
       `/api/feeds/users/${loadMoreCount}`,
       config
     );
 
-    // const { data } = await axios.get(
-    //   `/api/feeds/tags`,
-    //   config
-    // );
+    const { data: data_tags_follows } = await axios.get(
+      `/api/feeds/tags/${loadMoreCount}`,
+      config
+    );
 
-    // const { data } = await axios.get(
-    //   `/api/feeds/medium/A`,
-    //   config
-    // );
+    const { data: mediumA } = await axios.get(
+      `/api/feeds/medium/A/${loadMoreCount}`,
+      config
+    );
 
-    // const { data } = await axios.get(
-    //   `/api/feeds/medium/B`,
-    //   config
-    // );
+    const { data: mediumB } = await axios.get(
+      `/api/feeds/medium/B/${loadMoreCount}`,
+      config
+    );
+
+    const dataFeeds = data_users_follows.feeds.concat(
+      data_tags_follows.feeds,
+      mediumA.feeds,
+      mediumB.feeds
+    );
+
+    const feedData = { feeds: dataFeeds };
 
     let loadMoreFeeds = true;
     if (loadMoreCount == 30) {
@@ -82,7 +90,7 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
     }
     dispatch({
       type: FEED_LIST_SUCCESS,
-      payload: data,
+      payload: feedData,
       loadMoreFeeds: loadMoreFeeds,
     });
   } catch (error) {

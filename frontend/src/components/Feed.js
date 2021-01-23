@@ -12,25 +12,30 @@ const Feed = ({ feed, userFollows }) => {
         <Card.Text>{feed.description}</Card.Text>
         <Card.Text>
           {feed.tags
-            ? feed.tags.map((tag) => <Link to={`/tag/${tag}`}># {tag} </Link>)
+            ? feed.tags.map((tag) => <Link to={`/tag/${tag}`}>#{tag} </Link>)
             : ""}
         </Card.Text>
-        <blockquote className="blockquote mb-0">
-          <footer className="blockquote-footer">
-            <cite>
-              {feed.userId && feed.userId.name ? feed.userId.name : ""}
-            </cite>
-          </footer>
-        </blockquote>
-        {userFollows.userFollowing &&
-        !userFollows.userFollowing.includes(feed.userId._id) ? (
-          <Button className="mt-10" variant="primary">
-            Follow
-          </Button>
-        ) : (
-          <Button className="mt-10" variant="primary">
-            Unfollow
-          </Button>
+        {feed.userId && (
+          <>
+            <blockquote className="blockquote mb-0">
+              <footer className="blockquote-footer">
+                <cite>
+                  {feed.userId && feed.userId.name ? feed.userId.name : ""}
+                </cite>
+              </footer>
+            </blockquote>
+
+            {userFollows.userFollowing &&
+            !userFollows.userFollowing.includes(feed.userId._id) ? (
+              <Button className="mt-10" variant="primary">
+                Follow
+              </Button>
+            ) : (
+              <Button className="mt-10" variant="primary">
+                Unfollow
+              </Button>
+            )}
+          </>
         )}
       </Card.Body>
     </Card>
