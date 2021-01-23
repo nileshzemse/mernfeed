@@ -9,11 +9,10 @@ import mongoose from "mongoose";
 // @desc: Auth user and get a token
 // @access: public
 const authUser = asyncHandler(async (req, res) => {
-  //console.log(req.body)
-
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log("user::::", user);
+
+  // test error response
   // res.status(401)
   // throw new Error('Not Authorised')
 
