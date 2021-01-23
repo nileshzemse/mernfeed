@@ -41,11 +41,11 @@ export const feedListReducer = (state = { feeds: [] }, action) => {
         loading: true,
       };
     case FEED_LIST_SUCCESS:
+      const arr = state.feeds.concat(action.payload.feeds);
       return {
         loading: false,
-        feeds: action.payload.feeds,
-        pages: action.payload.pages,
-        page: action.payload.page,
+        feeds: arr,
+        loadMoreFeeds: action.loadMoreFeeds,
       };
     case FEED_LIST_FAIL:
       return {

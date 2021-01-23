@@ -17,7 +17,9 @@ const Feed = ({ feed, userFollows }) => {
         </Card.Text>
         <blockquote className="blockquote mb-0">
           <footer className="blockquote-footer">
-            <cite>{feed.userId.name}</cite>
+            <cite>
+              {feed.userId && feed.userId.name ? feed.userId.name : ""}
+            </cite>
           </footer>
         </blockquote>
         {userFollows.userFollowing &&

@@ -13,28 +13,23 @@ const HomeScreen = ({ history }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
+  const [loadMoreCount, setLoadMoreCount] = useState(1);
 
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  // set the state, so that api can make use of state, instead of
+  // geting data from db again and again
   const userFollows = useSelector((state) => state.userFollows);
-  const { userFollowing } = userFollows;
-
-  const userFollowsTags = useSelector((state) => state.userFollowsTags);
-  const { userFollowingTags } = userFollowsTags;
+  useSelector((state) => state.userFollowsTags);
 
   const feedCreate = useSelector((state) => state.feedCreate);
   const { loading, error, success, feed } = feedCreate;
 
   const feedList = useSelector((state) => state.feedList);
-  const {
-    loading: loadingFeedList,
-    error: loadingFeedError,
-    success: successFeedList,
-    feeds,
-  } = feedList;
+  const { loading: loadingFeedList, feeds, loadMoreFeeds } = feedList;
 
   useEffect(() => {
     if (!userInfo || !userInfo._id) {
@@ -48,7 +43,8 @@ const HomeScreen = ({ history }) => {
     dispatch(getUserFollowsTags());
 
     // get feeds
-    dispatch(listFeeds());
+    dispatch(listFeeds(1));
+    setLoadMoreCount(loadMoreCount + 1);
   }, [userInfo, history]);
 
   const submitHandler = (e) => {
@@ -63,7 +59,8 @@ const HomeScreen = ({ history }) => {
   };
 
   const loadMoreHandler = () => {
-    dispatch(listFeeds());
+    setLoadMoreCount(loadMoreCount + 1);
+    dispatch(listFeeds(loadMoreCount));
   };
 
   return (
@@ -121,16 +118,19 @@ const HomeScreen = ({ history }) => {
 
           <div className="feedContainer">
             {feeds ? (
-              feeds.map((feed) => (
-                <Feed key={feed._id} feed={feed} userFollows={userFollows} />
+              feeds.map((feed, i) => (
+                <div key={feed._id + i}>
+                  <Feed feed={feed} userFollows={userFollows} />
+                </div>
               ))
             ) : (
               <p>No feeds</p>
             )}
           </div>
 
-          {feeds.length > 0 ? (
+          {loadMoreFeeds ? (
             <div className="loadMoreFeedsBtn">
+              {loadingFeedList ? <Loader /> : ""}
               <Button variant="primary" onClick={loadMoreHandler}>
                 Load More...
               </Button>
