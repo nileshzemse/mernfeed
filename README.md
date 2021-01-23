@@ -6,7 +6,7 @@ To install this project on your local machine,
 you should have mongodb and node js version 14.4 or greater installed on your machine
 
 1. Download the source code from this git repository in your directory say "feeds"
-2. create a database called "nszfeeder" (edit .env file located in the root folder of this repository to have different database name)
+2. create a database "your-mongodb-database-name" (edit .env file located in the root folder of this repository to have you actual database name)
 3. install packages required for this project
 $ cd feeder
 $feeder> npm install
