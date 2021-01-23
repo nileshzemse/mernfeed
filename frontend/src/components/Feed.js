@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Feed = ({ feed, userFollows }) => {
   return (
-    <Card className="mt-10">
+    <Card className="mt-10" key={feed._id}>
       <Card.Body>
         <Card.Title>
           <b>{feed.title}</b>

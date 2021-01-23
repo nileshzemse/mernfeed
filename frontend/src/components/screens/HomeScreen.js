@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button, Form, Card } from "react-bootstrap";
+import { Row, Col, Button, Form } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
 import Meta from "../../components/Meta";
 import Feed from "../../components/Feed";
 import { getUserFollows, getUserFollowsTags } from "../../actions/userAction";
 import { createFeed, listFeeds } from "../../actions/feedAction";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 const HomeScreen = ({ history }) => {
   const [title, setTitle] = useState("");
@@ -26,7 +26,7 @@ const HomeScreen = ({ history }) => {
   useSelector((state) => state.userFollowsTags);
 
   const feedCreate = useSelector((state) => state.feedCreate);
-  const { loading, error, success, feed } = feedCreate;
+  const { loading, error, success } = feedCreate;
 
   const feedList = useSelector((state) => state.feedList);
   const { loading: loadingFeedList, feeds, loadMoreFeeds } = feedList;
@@ -50,7 +50,7 @@ const HomeScreen = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    if (title != "" && description != "") {
+    if (title !== "" && description !== "") {
       dispatch(createFeed(title, description, tags));
       setTitle("");
       setDescription("");
@@ -120,7 +120,7 @@ const HomeScreen = ({ history }) => {
             {feeds ? (
               feeds.map((feed, i) => (
                 <div key={feed._id + i}>
-                  <Feed feed={feed} userFollows={userFollows} />
+                  <Feed feed={feed} userFollows={userFollows}></Feed>
                 </div>
               ))
             ) : (

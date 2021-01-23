@@ -43,11 +43,22 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
 
     // get the users whome the login user follows and put it in state - userFollows
     const userFollows = getState().userFollows;
-    // console.log(userFollows.userFollowing);
+    let userFollowingArr = [];
+    if (userFollows.userFollowing !== undefined) {
+      userFollowingArr = userFollows.userFollowing;
+    }
+    const userFollowingJson = JSON.stringify(userFollowingArr);
 
     // get the tags which the login user follows and put it in state - userFollowsTags
     const userFollowsTags = getState().userFollowsTags;
-    // console.log(userFollowsTags.userFollowingTags);
+    let userFollowingTagsArr = [];
+    if (userFollowsTags.userFollowingTags !== undefined) {
+      userFollowingTagsArr = userFollowsTags.userFollowingTags;
+    }
+    const userFollowingTagsJson = JSON.stringify(userFollowingTagsArr);
+
+    // console.log(userFollowingJson);
+    // console.log(userFollowingTagsJson);
 
     const token = getState().userLogin.userInfo.token;
     const config = {
@@ -55,13 +66,15 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data: data_users_follows } = await axios.get(
+    const { data: data_users_follows } = await axios.post(
       `/api/feeds/users/${loadMoreCount}`,
+      { userFollowingJson },
       config
     );
 
-    const { data: data_tags_follows } = await axios.get(
+    const { data: data_tags_follows } = await axios.post(
       `/api/feeds/tags/${loadMoreCount}`,
+      { userFollowingTagsJson },
       config
     );
 
@@ -84,7 +97,7 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
     const feedData = { feeds: dataFeeds };
 
     let loadMoreFeeds = true;
-    if (loadMoreCount == 30) {
+    if (loadMoreCount === 30) {
       // todo make 30 as dynamic
       loadMoreFeeds = false;
     }

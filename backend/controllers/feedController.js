@@ -4,21 +4,28 @@ import FollowUser from "../models/followUserModel.js";
 import FollowTag from "../models/followTagModel.js";
 import mongoose from "mongoose";
 
-// @route: GET: localhost:5000/api/feeds/users
+// @route: POST: localhost:5000/api/feeds/users
 // @desc: get the posts from users which login user follows
 // @access: private
 const getFeedsFromUsers = asyncHandler(async (req, res) => {
   //
+  const { userFollowingJson } = req.body;
+  const userFollowing = JSON.parse(userFollowingJson);
+
   const page = req.params.page ? req.params.page : 1;
   const limit = 2;
 
-  // get users from state...
+  // get users not in state, then find from db
   let arrUsers = [];
-  const users = await FollowUser.findOne({ userId: req.user._id });
-  if (users) {
-    arrUsers = users.followsUserIds;
+  if (userFollowing.length === 0) {
+    const users = await FollowUser.findOne({ userId: req.user._id });
+    if (users) {
+      arrUsers = users.followsUserIds;
+    }
+  } else {
+    arrUsers = userFollowing;
   }
-  // console.log(arrUsers);
+
   if (arrUsers.length == 0) {
     res.status(404);
     throw new Error("Users not found");
@@ -39,19 +46,25 @@ const getFeedsFromUsers = asyncHandler(async (req, res) => {
   }
 });
 
-// @route: GET: localhost:5000/api/feeds/tags
+// @route: POST: localhost:5000/api/feeds/tags
 // @desc: get the posts having tags which login user follows
 // @access: private
 const getFeedsFromTags = asyncHandler(async (req, res) => {
   //
+  const { userFollowingTagsJson } = req.body;
+  const userFollowingTags = JSON.parse(userFollowingTagsJson);
   const page = req.params.page ? req.params.page : 1;
   const limit = 2;
 
-  // get tags from state...
+  // get users not in state, then find from db
   let arrTags = [];
-  const tags = await FollowTag.findOne({ userId: req.user._id });
-  if (tags) {
-    arrTags = tags.followsTags;
+  if (userFollowingTags.length === 0) {
+    const tags = await FollowTag.findOne({ userId: req.user._id });
+    if (tags) {
+      arrTags = tags.followsTags;
+    }
+  } else {
+    arrTags = userFollowingTags;
   }
 
   if (arrTags.length == 0) {
