@@ -72,21 +72,42 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
       config
     );
 
+    if (data_users_follows.feeds !== undefined) {
+      data_users_follows.feeds.map((d) => {
+        d.feedType = "Following User";
+      });
+    }
+
     const { data: data_tags_follows } = await axios.post(
       `/api/feeds/tags/${loadMoreCount}`,
       { userFollowingTagsJson },
       config
     );
+    if (data_tags_follows.feeds !== undefined) {
+      data_tags_follows.feeds.map((d) => {
+        d.feedType = "Following Tag";
+      });
+    }
 
     const { data: mediumA } = await axios.get(
       `/api/feeds/medium/A/${loadMoreCount}`,
       config
     );
+    if (mediumA.feeds !== undefined) {
+      mediumA.feeds.map((d) => {
+        d.feedType = "Medium A";
+      });
+    }
 
     const { data: mediumB } = await axios.get(
       `/api/feeds/medium/B/${loadMoreCount}`,
       config
     );
+    if (mediumB.feeds !== undefined) {
+      mediumB.feeds.map((d) => {
+        d.feedType = "Medium B";
+      });
+    }
 
     const dataFeeds = data_users_follows.feeds.concat(
       data_tags_follows.feeds,

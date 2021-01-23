@@ -15,6 +15,7 @@ const Feed = ({ feed, userFollows }) => {
             ? feed.tags.map((tag) => <Link to={`/tag/${tag}`}>#{tag} </Link>)
             : ""}
         </Card.Text>
+        {feed.feedType && <Card.Text>Type: {feed.feedType}</Card.Text>}
         {feed.userId && (
           <>
             <blockquote className="blockquote mb-0">
