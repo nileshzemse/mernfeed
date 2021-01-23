@@ -142,20 +142,6 @@ const followTag = asyncHandler(async (req, res) => {
   }
 });
 
-// @route: GET: localhost:5000/api/users/chat
-// @desc: get list of all users except login user
-// @access: private Admin
-// const getUsersForChat = asyncHandler(async (req, res) => {
-//   const users = await User.find({ _id: { $ne: req.user._id } }).select("name");
-
-//   if (users) {
-//     res.send(users);
-//   } else {
-//     res.status(404);
-//     throw new Error("Users not found");
-//   }
-// });
-
 export {
   authUser,
   getUserProfile,
