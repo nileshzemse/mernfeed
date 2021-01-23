@@ -6,8 +6,9 @@ To install this project on your local machine,
 you should have mongodb and node js version 14.4 or greater installed on your machine
 
 1. Download the source code from this git repository in your directory say "feeds"
-2. create a database "your-mongodb-database-name" (edit .env file located in the root folder of this repository to have you actual database name)
+2. create a database "your-mongodb-database-name" (create .env file in the root folder of this repository, put actual database name in .env file)
 3. install packages required for this project
+
 $ cd feeder
 $feeder> npm install
 
@@ -15,10 +16,15 @@ $ cd frontend
 $feeder/frontend> npm install
 
 Also create .env file in feeder directory, It should be like this
+
 NODE_ENV=development
+
 PORT=5000
+
 MONGO_URL=mongodb://localhost/your-mongodb-database-name
+
 JWT_SECRET=your-secret-key-for-jwt
+
 
 4. Create sample data to mongodb database by running the script seeder.js
 $ cd feeder
