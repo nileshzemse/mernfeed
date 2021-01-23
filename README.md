@@ -18,7 +18,7 @@ Also create .env file in feeder directory, It should be like this
 NODE_ENV=development
 PORT=5000
 MONGO_URL=mongodb://localhost/your-mongodb-database-name
-JWT_SECRET=your-secret0key-for-jwt
+JWT_SECRET=your-secret-key-for-jwt
 
 4. Create sample data to mongodb database by running the script seeder.js
 $ cd feeder
