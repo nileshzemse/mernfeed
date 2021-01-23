@@ -51,6 +51,7 @@ export const feedListReducer = (state = { feeds: [] }, action) => {
       return {
         loading: false,
         error: action.payload,
+        feeds: [],
       };
     default:
       return state;
