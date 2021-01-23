@@ -10,6 +10,16 @@ you should have mongodb and node js version 14.4 or greater installed on your ma
 3. install packages required for this project
 $ cd feeder
 $feeder> npm install
+
+$ cd frontend
+$feeder/frontend> npm install
+
+Also create .env file in feeder directory, It should be like this
+NODE_ENV=development
+PORT=5000
+MONGO_URL=mongodb://localhost/your-mongodb-database-name
+JWT_SECRET=your-secret0key-for-jwt
+
 4. Create sample data to mongodb database by running the script seeder.js
 $ cd feeder
 $feeder> npm run data:import
