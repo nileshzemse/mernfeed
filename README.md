@@ -59,7 +59,7 @@ Functionality done so far:
 2. create a feed
 3. show feeds form users which the login user follows
 4. show special feeds from medium.com Type A, B
-Feeds are shown in the sequense - 2 from user-following, 1 of type A, 1 of type B 
+Feeds are shown in the sequence - 2 from user-following, 1 of type A, 1 of type B 
 5. Get the feeds on clicking Load More button
 6. Api - user login
 7. Api - get user profile
