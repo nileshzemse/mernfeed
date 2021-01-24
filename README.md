@@ -26,15 +26,22 @@ MONGO_URL=mongodb://localhost/your-mongodb-database-name
 JWT_SECRET=your-secret-key-for-jwt
 
 4. Create sample data to mongodb database by running the script seeder.js
+
 $ cd feeder
+
 $feeder> npm run data:import
 
+
 5. In future you may want to delete this sample data by running the script seeder.js like below
+
 $ cd feeder
+
 $feeder> npm run data:destroy
 
 6. run the project
+
 $ cd feeder
+
 $feeder> npm run dev
 
 you should see http://localhost:3000 running.
