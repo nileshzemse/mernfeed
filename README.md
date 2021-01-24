@@ -25,16 +25,15 @@ MONGO_URL=mongodb://localhost/your-mongodb-database-name
 
 JWT_SECRET=your-secret-key-for-jwt
 
-
 4. Create sample data to mongodb database by running the script seeder.js
-$ cd feeder
-$feeder> npm run data:import
+   $ cd feeder
+   $feeder> npm run data:import
 5. In future you may want to delete this sample data by running the script seeder.js like below
-$ cd feeder
-$feeder> npm run data:destroy
+   $ cd feeder
+   $feeder> npm run data:destroy
 6. run the project
-$ cd feeder
-$feeder> npm run dev
+   $ cd feeder
+   $feeder> npm run dev
 
 you should see http://localhost:3000 running
 By dafault, if user is not login then it redirects to login page
@@ -46,25 +45,29 @@ you will be redirected to home page, showing a form to create a feed,
 and below that feeds are shown
 
 Functionality Done so far:
+
 1. user login
 2. create a feed
 3. show feeds form users which the login user follows
-4. Api - user login
-5. Api - get user profile
-6. Api - get userIds followed by login user
-7. Api - get tags followed by login user
-8. Api - login user can follow the userId coming in post request
-9. Api - login user can follow the tag coming in post request
-10. Api - get the posts from users which login user follows
-11. Api - get the posts having tags which login user follows
-12. Api - get the posts from medium.com
-13. Api - get the posts having tag which which is passed in GET
-14. Api - create a post
+4. show special feeds from medium.com Type A, B
+5. Get the feeds on clicking Load More button or scroll down
+6. Api - user login
+7. Api - get user profile
+8. Api - get userIds followed by login user
+9. Api - get tags followed by login user
+10. Api - login user can follow the userId coming in post request
+11. Api - login user can follow the tag coming in post request
+12. Api - get the feeds from users which login user follows
+13. Api - get the feeds having tags which login user follows
+14. Api - get the feeds from users and tags which login user follows
+15. Api - get the feeds from medium.com
+16. Api - get the feeds having tag which which is passed in GET
+17. Api - create a post
 
-Functionality Pending: 
-1. Get the feeds on clicking Load More button or scroll down
-2. Get the feeds mixture of feeds from users and tags which login user follows
-3. show feeds on tags page
-4. Follow/Unfollow user
-5. Follow/Unfollow tag
-6. global tags - autosuggest while creating feed-post
+Functionality Pending:
+
+1. Get the feeds on scroll down
+2. show feeds on tags page
+3. Follow/Unfollow user
+4. Follow/Unfollow tag
+5. global tags - autosuggest while creating feed-post

@@ -66,28 +66,40 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    const { data: data_users_follows } = await axios.post(
-      `/api/feeds/users/${loadMoreCount}`,
-      { userFollowingJson },
+
+    const { data: data_follows } = await axios.post(
+      `/api/feeds/users_tags/${loadMoreCount}`,
+      { userFollowingJson, userFollowingTagsJson },
       config
     );
-
-    if (data_users_follows.feeds !== undefined) {
-      data_users_follows.feeds.map((d) => {
-        d.feedType = "Following User";
+    if (data_follows.feeds !== undefined) {
+      data_follows.feeds.map((d) => {
+        d.feedType = "Follow";
       });
     }
 
-    const { data: data_tags_follows } = await axios.post(
-      `/api/feeds/tags/${loadMoreCount}`,
-      { userFollowingTagsJson },
-      config
-    );
-    if (data_tags_follows.feeds !== undefined) {
-      data_tags_follows.feeds.map((d) => {
-        d.feedType = "Following Tag";
-      });
-    }
+    // const { data: data_users_follows } = await axios.post(
+    //   `/api/feeds/users/${loadMoreCount}`,
+    //   { userFollowingJson },
+    //   config
+    // );
+
+    // if (data_users_follows.feeds !== undefined) {
+    //   data_users_follows.feeds.map((d) => {
+    //     d.feedType = "Following User";
+    //   });
+    // }
+
+    // const { data: data_tags_follows } = await axios.post(
+    //   `/api/feeds/tags/${loadMoreCount}`,
+    //   { userFollowingTagsJson },
+    //   config
+    // );
+    // if (data_tags_follows.feeds !== undefined) {
+    //   data_tags_follows.feeds.map((d) => {
+    //     d.feedType = "Following Tag";
+    //   });
+    // }
 
     const { data: mediumA } = await axios.get(
       `/api/feeds/medium/A/${loadMoreCount}`,
@@ -109,11 +121,7 @@ export const listFeeds = (loadMoreCount) => async (dispatch, getState) => {
       });
     }
 
-    const dataFeeds = data_users_follows.feeds.concat(
-      data_tags_follows.feeds,
-      mediumA.feeds,
-      mediumB.feeds
-    );
+    const dataFeeds = data_follows.feeds.concat(mediumA.feeds, mediumB.feeds);
 
     const feedData = { feeds: dataFeeds };
 

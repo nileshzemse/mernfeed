@@ -87,6 +87,63 @@ const getFeedsFromTags = asyncHandler(async (req, res) => {
   }
 });
 
+// @route: POST: localhost:5000/api/feeds/users_and_tags
+// @desc: get the posts from users and tags which login user follows
+// @access: private
+const getFeedsFromUsersTags = asyncHandler(async (req, res) => {
+  //
+  const { userFollowingJson } = req.body;
+  const userFollowing = JSON.parse(userFollowingJson);
+
+  const { userFollowingTagsJson } = req.body;
+  const userFollowingTags = JSON.parse(userFollowingTagsJson);
+
+  const page = req.params.page ? req.params.page : 1;
+  const limit = 2;
+
+  // get users not in state, then find from db
+  let arrUsers = [];
+  if (userFollowing.length === 0) {
+    const users = await FollowUser.findOne({ userId: req.user._id });
+    if (users) {
+      arrUsers = users.followsUserIds;
+    }
+  } else {
+    arrUsers = userFollowing;
+  }
+
+  // get users not in state, then find from db
+  let arrTags = [];
+  if (userFollowingTags.length === 0) {
+    const tags = await FollowTag.findOne({ userId: req.user._id });
+    if (tags) {
+      arrTags = tags.followsTags;
+    }
+  } else {
+    arrTags = userFollowingTags;
+  }
+
+  if (arrUsers.length === 0 && arrTags.length === 0) {
+    res.send({ feeds: [] });
+  }
+
+  const skip = limit * page - limit;
+  const feeds = await Post.find({
+    $or: [{ userId: { $in: arrUsers } }, { tags: { $in: arrTags } }],
+  })
+    .populate("userId", "name email")
+    .limit(limit)
+    .skip(skip)
+    .sort("-createdAt");
+
+  if (feeds) {
+    res.send({ feeds: feeds });
+  } else {
+    res.status(404);
+    throw new Error("Tags not found");
+  }
+});
+
 // @route: GET: localhost:5000/api/feeds/medium/:ctype/:page
 // @desc: get the posts from medium.com
 // @access: private
@@ -170,6 +227,7 @@ const createFeed = asyncHandler(async (req, res) => {
 export {
   getFeedsFromUsers,
   getFeedsFromTags,
+  getFeedsFromUsersTags,
   getFeedsFromMedium,
   getFeedsFromTag,
   createFeed,
