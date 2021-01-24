@@ -29,7 +29,10 @@ const HomeScreen = ({ history }) => {
   const { loading, error, success } = feedCreate;
 
   const feedList = useSelector((state) => state.feedList);
-  const { loading: loadingFeedList, feeds, loadMoreFeeds } = feedList;
+  const { loading: loadingFeedList, feeds } = feedList;
+
+  const feedLoadMore = useSelector((state) => state.feedLoadMore);
+  const { status: feedLoadMoreStatus } = feedLoadMore;
 
   useEffect(() => {
     if (!userInfo || !userInfo._id) {
@@ -120,7 +123,11 @@ const HomeScreen = ({ history }) => {
             {feeds ? (
               feeds.map((feed, i) => (
                 <div key={feed._id + i}>
-                  <Feed feed={feed} userFollows={userFollows}></Feed>
+                  <Feed
+                    feed={feed}
+                    userFollows={userFollows}
+                    data_i={i + 1}
+                  ></Feed>
                 </div>
               ))
             ) : (
@@ -128,16 +135,14 @@ const HomeScreen = ({ history }) => {
             )}
           </div>
 
-          {loadMoreFeeds ? (
-            <div className="loadMoreFeedsBtn">
-              {loadingFeedList ? <Loader /> : ""}
+          <div className="loadMoreFeedsBtn">
+            {loadingFeedList ? <Loader /> : ""}
+            {feedLoadMoreStatus && (
               <Button variant="primary" onClick={loadMoreHandler}>
                 Load More...
               </Button>
-            </div>
-          ) : (
-            ""
-          )}
+            )}
+          </div>
         </Col>
       </Row>
     </>

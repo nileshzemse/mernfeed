@@ -2,12 +2,14 @@ import React from "react";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const Feed = ({ feed, userFollows }) => {
+const Feed = ({ feed, userFollows, data_i }) => {
   return (
     <Card className="mt-10" key={feed._id}>
       <Card.Body>
         <Card.Title>
-          <b>{feed.title}</b>
+          <b>
+            {data_i}. {feed.title}
+          </b>
         </Card.Title>
         <Card.Text>{feed.description}</Card.Text>
         <Card.Text>

@@ -8,7 +8,12 @@ import {
   userFollowsTagsReducer,
 } from "./reducers/userReducers";
 
-import { feedCreateReducer, feedListReducer } from "./reducers/feedReducers";
+import {
+  feedCreateReducer,
+  feedListReducer,
+  feedPaginationReducer,
+  feedLoadMoreReducer,
+} from "./reducers/feedReducers";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -16,6 +21,8 @@ const reducer = combineReducers({
   userFollowsTags: userFollowsTagsReducer,
   feedCreate: feedCreateReducer,
   feedList: feedListReducer,
+  feedPagination: feedPaginationReducer,
+  feedLoadMore: feedLoadMoreReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

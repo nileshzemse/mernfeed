@@ -6,6 +6,8 @@ import {
   FEED_LIST_REQUEST,
   FEED_LIST_SUCCESS,
   FEED_LIST_FAIL,
+  FEED_PAGINATION,
+  FEED_LOAD_MORE,
 } from "../constants/feedConstants";
 
 export const feedCreateReducer = (state = { feed: {} }, action) => {
@@ -45,13 +47,34 @@ export const feedListReducer = (state = { feeds: [] }, action) => {
       return {
         loading: false,
         feeds: arr,
-        loadMoreFeeds: action.loadMoreFeeds,
       };
     case FEED_LIST_FAIL:
       return {
         loading: false,
         error: action.payload,
         feeds: [],
+      };
+    default:
+      return state;
+  }
+};
+
+export const feedPaginationReducer = (state = { data: {} }, action) => {
+  switch (action.type) {
+    case FEED_PAGINATION:
+      return {
+        data: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const feedLoadMoreReducer = (state = { status: true }, action) => {
+  switch (action.type) {
+    case FEED_LOAD_MORE:
+      return {
+        status: action.payload,
       };
     default:
       return state;

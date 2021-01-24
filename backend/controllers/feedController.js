@@ -87,19 +87,19 @@ const getFeedsFromTags = asyncHandler(async (req, res) => {
   }
 });
 
-// @route: POST: localhost:5000/api/feeds/users_and_tags
-// @desc: get the posts from users and tags which login user follows
+// @route: POST: localhost:5000/api/feeds/users_and_tags_count
+// @desc: get the count of posts from users and tags which login user follows
 // @access: private
-const getFeedsFromUsersTags = asyncHandler(async (req, res) => {
+const getFeedsFromUsersTagsCount = asyncHandler(async (req, res) => {
   //
-  const { userFollowingJson } = req.body;
+  const { userFollowingJson, userFollowingTagsJson } = req.body;
+  let { skip } = req.body;
   const userFollowing = JSON.parse(userFollowingJson);
-
-  const { userFollowingTagsJson } = req.body;
   const userFollowingTags = JSON.parse(userFollowingTagsJson);
 
-  const page = req.params.page ? req.params.page : 1;
-  const limit = 2;
+  if (skip === undefined || !skip) {
+    skip = 0;
+  }
 
   // get users not in state, then find from db
   let arrUsers = [];
@@ -127,7 +127,60 @@ const getFeedsFromUsersTags = asyncHandler(async (req, res) => {
     res.send({ feeds: [] });
   }
 
-  const skip = limit * page - limit;
+  console.log("skip=", skip);
+  const count = await Post.countDocuments({
+    $or: [{ userId: { $in: arrUsers } }, { tags: { $in: arrTags } }],
+  })
+    .populate("userId", "name email")
+    .skip(skip)
+    .sort("-createdAt");
+
+  if (count) {
+    res.send({ count });
+  } else {
+    res.status(404);
+    throw new Error("Tags not found");
+  }
+});
+
+// @route: POST: localhost:5000/api/feeds/users_and_tags
+// @desc: get the posts from users and tags which login user follows
+// @access: private
+const getFeedsFromUsersTags = asyncHandler(async (req, res) => {
+  //
+  const { userFollowingJson, userFollowingTagsJson } = req.body;
+  const userFollowing = JSON.parse(userFollowingJson);
+  const userFollowingTags = JSON.parse(userFollowingTagsJson);
+
+  const skip = req.params.skip ? parseInt(req.params.skip) : 1;
+  const limit = req.params.limit ? parseInt(req.params.limit) : 1;
+
+  // get users not in state, then find from db
+  let arrUsers = [];
+  if (userFollowing.length === 0) {
+    const users = await FollowUser.findOne({ userId: req.user._id });
+    if (users) {
+      arrUsers = users.followsUserIds;
+    }
+  } else {
+    arrUsers = userFollowing;
+  }
+
+  // get users not in state, then find from db
+  let arrTags = [];
+  if (userFollowingTags.length === 0) {
+    const tags = await FollowTag.findOne({ userId: req.user._id });
+    if (tags) {
+      arrTags = tags.followsTags;
+    }
+  } else {
+    arrTags = userFollowingTags;
+  }
+
+  if (arrUsers.length === 0 && arrTags.length === 0) {
+    res.send({ feeds: [] });
+  }
+
   const feeds = await Post.find({
     $or: [{ userId: { $in: arrUsers } }, { tags: { $in: arrTags } }],
   })
@@ -144,16 +197,41 @@ const getFeedsFromUsersTags = asyncHandler(async (req, res) => {
   }
 });
 
-// @route: GET: localhost:5000/api/feeds/medium/:ctype/:page
+// @route: POST: localhost:5000/api/feeds/medium_count/:ctype/
+// @desc: get the posts from medium.com
+// @access: private
+const getFeedsFromMediumCount = asyncHandler(async (req, res) => {
+  //
+  const ctype = req.params.ctype;
+  let { skip } = req.body;
+  if (skip === undefined || !skip) {
+    skip = 0;
+  }
+  const count = await Post.countDocuments({
+    community: "medium.com",
+    ctype: ctype,
+  })
+    .skip(skip)
+    .sort("-createdAt");
+
+  if (count) {
+    res.send({ count });
+  } else {
+    res.status(404);
+    throw new Error("Feed not found");
+  }
+});
+
+// @route: POST: localhost:5000/api/feeds/medium/:ctype/:page
 // @desc: get the posts from medium.com
 // @access: private
 const getFeedsFromMedium = asyncHandler(async (req, res) => {
   //
   const ctype = req.params.ctype;
-  const page = req.params.page ? req.params.page : 1;
-  const limit = 1;
+  const limit = req.params.limit ? parseInt(req.params.limit) : 1;
+  const skip = req.params.skip ? parseInt(req.params.skip) : 1;
 
-  const skip = limit * page - limit;
+  // const skip = limit * page - limit;
   const feeds = await Post.find({
     community: "medium.com",
     ctype: ctype,
@@ -228,7 +306,9 @@ export {
   getFeedsFromUsers,
   getFeedsFromTags,
   getFeedsFromUsersTags,
+  getFeedsFromUsersTagsCount,
   getFeedsFromMedium,
+  getFeedsFromMediumCount,
   getFeedsFromTag,
   createFeed,
 };
