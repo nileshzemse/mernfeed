@@ -26,25 +26,27 @@ MONGO_URL=mongodb://localhost/your-mongodb-database-name
 JWT_SECRET=your-secret-key-for-jwt
 
 4. Create sample data to mongodb database by running the script seeder.js
-   $ cd feeder
-   $feeder> npm run data:import
+$ cd feeder
+$feeder> npm run data:import
+
 5. In future you may want to delete this sample data by running the script seeder.js like below
-   $ cd feeder
-   $feeder> npm run data:destroy
+$ cd feeder
+$feeder> npm run data:destroy
+
 6. run the project
-   $ cd feeder
-   $feeder> npm run dev
+$ cd feeder
+$feeder> npm run dev
 
-you should see http://localhost:3000 running
-By dafault, if user is not login then it redirects to login page
-see the list of username, passwords in /feeder/backend/data/users.js
+you should see http://localhost:3000 running.
+By dafault, if user is not login then it redirects to login page.
+See the list of username, passwords in /feeder/backend/data/users.js
 
-Login with jovita@gmail.com/j123456
+Login with say jovita@gmail.com/j123456
 
 you will be redirected to home page, showing a form to create a feed,
 and below that feeds are shown
 
-Functionality Done so far:
+Functionality done so far:
 
 1. user login
 2. create a feed
